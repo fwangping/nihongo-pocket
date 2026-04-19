@@ -1,8 +1,17 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nihongo-pocket",
+  "main": "./worker/index.js",
   "compatibility_date": "2026-04-19",
   "assets": {
-    "directory": "./site"
-  }
+    "directory": "./site",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nihongo-pocket-db",
+      "database_id": "01a639ae-0bd2-46a6-a5cd-dc37b922de4a"
+    }
+  ]
 }

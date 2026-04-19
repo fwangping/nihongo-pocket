@@ -1,4 +1,4 @@
-const CACHE_NAME = "nihongo-pocket-v1";
+const CACHE_NAME = "nihongo-pocket-v2";
 const ASSETS = [
   "./",
   "./index.html",

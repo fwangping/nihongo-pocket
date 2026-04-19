@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#f6efe2" />
-    <meta name="description" content="Nihongo Pocket：从五十音到 JLPT N2 的手机日语学习工具。" />
+    <meta name="description" content="Nihongo Pocket：从五十音到 N5 的手机日语学习工具，支持登录和云同步。" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="stylesheet" href="./app.css" />
     <title>Nihongo Pocket</title>
@@ -16,23 +16,25 @@
           <p class="eyebrow">Mobile Japanese Study</p>
           <h1>Nihongo Pocket</h1>
           <p class="hero-text">
-            从五十音到 JLPT N2 的随身学习工具。把每天的学习拆成很短的小步：先认字，再记词，再熟悉语法。
+            先把 N5 做成真正能学、真正能测的版本：完整五十音、80 个基础词、20 条高频语法，再配上登录和云同步，让手机和电脑进度一致。
           </p>
           <div class="hero-actions">
-            <button class="primary" data-jump="today">开始今日任务</button>
-            <button class="ghost" data-jump="flashcards">继续背词</button>
-            <button class="ghost" data-jump="grammar">看语法</button>
+            <button class="primary" data-jump="kana">从五十音开始</button>
+            <button class="ghost" data-jump="flashcards">直接背词</button>
+            <button class="ghost" data-jump="grammar">看 N5 语法</button>
           </div>
         </div>
         <div class="hero-stats" id="hero-stats"></div>
       </header>
 
       <main>
+        <section class="panel auth-panel" id="auth-panel"></section>
+
         <section class="panel roadmap-panel" id="today-panel">
           <div class="section-title">
             <div>
               <h2>今日学习计划</h2>
-              <p>推荐顺序：五十音 3 分钟 → 闪卡 5 分钟 → 语法 5 分钟。</p>
+              <p>推荐顺序：五十音 3 分钟 → 测验 5 分钟 → 闪卡 8 张 → 语法 2 条。</p>
             </div>
           </div>
           <div class="today-grid" id="today-grid"></div>
@@ -42,7 +44,7 @@
           <div class="section-title">
             <div>
               <h2>学习路径</h2>
-              <p>先打基础，再进入词汇与语法并行训练。</p>
+              <p>当前先把五十音、入门词汇和 N5 语法打实，后续再继续扩到 N4-N2。</p>
             </div>
           </div>
           <div class="roadmap" id="roadmap"></div>
@@ -50,6 +52,7 @@
 
         <nav class="tabbar" aria-label="Study sections">
           <button class="tab active" data-tab="kana">五十音</button>
+          <button class="tab" data-tab="quiz">测验</button>
           <button class="tab" data-tab="flashcards">闪卡</button>
           <button class="tab" data-tab="grammar">语法</button>
           <button class="tab" data-tab="progress">进度</button>
@@ -59,8 +62,8 @@
           <div class="panel">
             <div class="section-title compact-title">
               <div>
-                <h2>五十音起步</h2>
-                <p>先看字符，再读罗马音。每天快速扫一遍，建立熟悉感。</p>
+                <h2>完整五十音</h2>
+                <p>包含清音、浊音、半浊音和常见拗音，先从平假名开始更顺手。</p>
               </div>
               <button class="ghost" id="mark-kana-done">完成今日字符练习</button>
             </div>
@@ -68,7 +71,22 @@
               <button class="chip active" data-kana-filter="hiragana">平假名</button>
               <button class="chip" data-kana-filter="katakana">片假名</button>
             </div>
-            <div class="kana-grid" id="kana-grid"></div>
+            <div class="kana-groups" id="kana-groups"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="quiz">
+          <div class="panel">
+            <div class="section-title compact-title">
+              <div>
+                <h2>学习小测验</h2>
+                <p>五十音和单词用罗马字输入，语法用选择题。达到目标分数后才解锁下一阶段。</p>
+              </div>
+            </div>
+            <div class="quiz-overview" id="quiz-overview"></div>
+            <div class="filter-row" id="quiz-mode-filters"></div>
+            <article class="quiz-card" id="quiz-card"></article>
+            <div class="quiz-actions" id="quiz-actions"></div>
           </div>
         </section>
 
@@ -76,12 +94,15 @@
           <div class="panel">
             <div class="section-title compact-title">
               <div>
-                <h2>单词闪卡</h2>
-                <p>先回忆，再翻面，再判断“记住了”还是“再来一次”。</p>
+                <h2>N5 闪卡</h2>
+                <p>先想答案，再翻面；不会的词交给“只看薄弱词”集中处理。阶段未解锁时会提示你先做测验。</p>
               </div>
               <button class="ghost" id="weak-only-toggle">只看薄弱词</button>
             </div>
-            <div class="filter-row" id="flashcard-filters"></div>
+            <div class="filter-stack">
+              <div class="filter-row" id="flashcard-filters"></div>
+              <input id="flashcard-search" class="text-input" type="text" placeholder="搜索词汇、读音、中文或分类" />
+            </div>
             <article class="flashcard" id="flashcard" aria-live="polite"></article>
             <div class="review-actions">
               <button class="ghost" id="flip-card">翻面</button>
@@ -96,11 +117,14 @@
           <div class="panel">
             <div class="section-title compact-title">
               <div>
-                <h2>语法熟悉</h2>
-                <p>每次只看 1 到 2 条，重点看含义、结构和例句。</p>
+                <h2>N5 语法</h2>
+                <p>每次读 1-2 条就够了，重点看结构和例句。学完后去“测验”做 JLPT 风格选择题。</p>
               </div>
             </div>
-            <div class="filter-row" id="grammar-filters"></div>
+            <div class="filter-stack">
+              <div class="filter-row" id="grammar-filters"></div>
+              <input id="grammar-search" class="text-input" type="text" placeholder="搜索语法、含义、例句" />
+            </div>
             <div class="grammar-list" id="grammar-list"></div>
           </div>
         </section>
@@ -110,7 +134,7 @@
             <div class="section-title compact-title">
               <div>
                 <h2>学习进度</h2>
-                <p>当前版本保存在本机浏览器，后续可以接 Cloudflare D1 做跨设备同步。</p>
+                <p>本地和云端都会保存一份；登录后会自动同步。所有目标都达成后会提示你继续添加新内容。</p>
               </div>
               <button class="ghost" id="reset-progress">重置本地进度</button>
             </div>
