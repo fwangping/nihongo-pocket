@@ -1,5 +1,8 @@
 {
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nihongo-pocket",
-  "pages_build_output_dir": "site",
-  "compatibility_date": "2026-04-19"
+  "compatibility_date": "2026-04-19",
+  "assets": {
+    "directory": "./site"
+  }
 }
