@@ -1,0 +1,10 @@
+{
+  "name": "Nihongo Pocket",
+  "short_name": "Nihongo",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6efe2",
+  "theme_color": "#f6efe2",
+  "description": "从五十音到 N2 的手机日语学习工具。",
+  "icons": []
+}
