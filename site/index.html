@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#f6efe2" />
-    <meta
-      name="description"
-      content="Nihongo Pocket 是一个可在手机访问的日语学习 PWA，覆盖五十音、单词闪卡、语法熟悉和阶段进度。"
-    />
+    <meta name="description" content="Nihongo Pocket：从五十音到 JLPT N2 的手机日语学习工具。" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="stylesheet" href="./app.css" />
     <title>Nihongo Pocket</title>
@@ -19,17 +16,34 @@
           <p class="eyebrow">Mobile Japanese Study</p>
           <h1>Nihongo Pocket</h1>
           <p class="hero-text">
-            从五十音到 JLPT N2 的随身学习小工具。今天学一点，明天就能继续，无论你是在手机、平板还是电脑上。
+            从五十音到 JLPT N2 的随身学习工具。把每天的学习拆成很短的小步：先认字，再记词，再熟悉语法。
           </p>
+          <div class="hero-actions">
+            <button class="primary" data-jump="today">开始今日任务</button>
+            <button class="ghost" data-jump="flashcards">继续背词</button>
+            <button class="ghost" data-jump="grammar">看语法</button>
+          </div>
         </div>
         <div class="hero-stats" id="hero-stats"></div>
       </header>
 
       <main>
+        <section class="panel roadmap-panel" id="today-panel">
+          <div class="section-title">
+            <div>
+              <h2>今日学习计划</h2>
+              <p>推荐顺序：五十音 3 分钟 → 闪卡 5 分钟 → 语法 5 分钟。</p>
+            </div>
+          </div>
+          <div class="today-grid" id="today-grid"></div>
+        </section>
+
         <section class="panel roadmap-panel">
           <div class="section-title">
-            <h2>学习路径</h2>
-            <p>先打基础，再进入词汇与语法并行训练。</p>
+            <div>
+              <h2>学习路径</h2>
+              <p>先打基础，再进入词汇与语法并行训练。</p>
+            </div>
           </div>
           <div class="roadmap" id="roadmap"></div>
         </section>
@@ -43,9 +57,12 @@
 
         <section class="tab-panel active" data-panel="kana">
           <div class="panel">
-            <div class="section-title">
-              <h2>五十音起步</h2>
-              <p>先熟悉平假名和片假名，再进入单词和语法。</p>
+            <div class="section-title compact-title">
+              <div>
+                <h2>五十音起步</h2>
+                <p>先看字符，再读罗马音。每天快速扫一遍，建立熟悉感。</p>
+              </div>
+              <button class="ghost" id="mark-kana-done">完成今日字符练习</button>
             </div>
             <div class="kana-toolbar">
               <button class="chip active" data-kana-filter="hiragana">平假名</button>
@@ -57,9 +74,12 @@
 
         <section class="tab-panel" data-panel="flashcards">
           <div class="panel">
-            <div class="section-title">
-              <h2>单词闪卡</h2>
-              <p>按阶段筛选，点击卡片翻面，然后标记“记住了”或“再来一次”。</p>
+            <div class="section-title compact-title">
+              <div>
+                <h2>单词闪卡</h2>
+                <p>先回忆，再翻面，再判断“记住了”还是“再来一次”。</p>
+              </div>
+              <button class="ghost" id="weak-only-toggle">只看薄弱词</button>
             </div>
             <div class="filter-row" id="flashcard-filters"></div>
             <article class="flashcard" id="flashcard" aria-live="polite"></article>
@@ -74,9 +94,11 @@
 
         <section class="tab-panel" data-panel="grammar">
           <div class="panel">
-            <div class="section-title">
-              <h2>语法熟悉</h2>
-              <p>每条语法都附带含义、结构和例句，便于复习和建立语感。</p>
+            <div class="section-title compact-title">
+              <div>
+                <h2>语法熟悉</h2>
+                <p>每次只看 1 到 2 条，重点看含义、结构和例句。</p>
+              </div>
             </div>
             <div class="filter-row" id="grammar-filters"></div>
             <div class="grammar-list" id="grammar-list"></div>
@@ -85,9 +107,12 @@
 
         <section class="tab-panel" data-panel="progress">
           <div class="panel">
-            <div class="section-title">
-              <h2>学习进度</h2>
-              <p>当前版本保存在本机浏览器，之后可以接 Cloudflare D1 做跨设备同步。</p>
+            <div class="section-title compact-title">
+              <div>
+                <h2>学习进度</h2>
+                <p>当前版本保存在本机浏览器，后续可以接 Cloudflare D1 做跨设备同步。</p>
+              </div>
+              <button class="ghost" id="reset-progress">重置本地进度</button>
             </div>
             <div class="progress-cards" id="progress-cards"></div>
           </div>
